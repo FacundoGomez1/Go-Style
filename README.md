@@ -1,2 +1,52 @@
-# Go-Style
-Sitstema de registro de cortes y suscripciones
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Registro de Cortes - Barbería</title>
+  <style>
+    body { font-family: Arial; background: #f8f8f8; text-align: center; padding: 20px; }
+    form { background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px #ccc; display: inline-block; }
+    input, button { margin: 10px; padding: 10px; width: 80%; border: 1px solid #ccc; border-radius: 5px; }
+    .respuesta { margin-top: 15px; font-weight: bold; }
+  </style>
+</head>
+<body>
+
+  <h1>Registro de Corte</h1>
+  <form id="formulario">
+    <input type="text" name="nombre" placeholder="Nombre del cliente" required><br>
+    <input type="date" name="fechaInicio" required><br>
+    <input type="text" name="codigo" placeholder="Código de suscripción (opcional)"><br>
+    <button type="submit">Registrar Corte</button>
+  </form>
+
+  <div class="respuesta" id="respuesta"></div>
+
+  <script>
+    const formulario = document.getElementById('formulario');
+    const respuesta = document.getElementById('respuesta');
+
+    formulario.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const datos = new FormData(formulario);
+
+      fetch('https://script.google.com/macros/s/AKfycbwwSrFWL8Uj_h5Y4zBs9AWx2u8VGTG2-XQ89JbGVNew4HZnVTUptsW0Nu4EGh2ORIJpyw/exec', {
+        method: 'POST',
+        body: datos
+      })
+      .then(response => response.json())
+      .then(data => {
+        respuesta.innerHTML = data.message;
+        if (data.alerta) {
+          respuesta.innerHTML += "<br>" + data.alerta;
+        }
+      })
+      .catch(error => {
+        respuesta.innerHTML = "❌ Error al registrar el corte.";
+        console.error(error);
+      });
+    });
+  </script>
+
+</body>
+</html>
